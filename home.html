@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orphanage Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* General CSS */
+    p {
+      font-family: Roboto, arial;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    body {
+      margin: 0;
+      padding-top: 80px;
+      padding-left: 96px;
+      padding-right: 24px;
+      background-color: rgb(252, 247, 247);
+    }
+
+    /* Header CSS */
+    .header {
+      height: 55px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border-bottom-style: solid;
+      border-bottom-color: rgb(238, 235, 235);
+      z-index: 100;
+    }
+    .left-section {
+      display: flex;
+      align-items: center;
+    }
+    .middle-section {
+      flex: 1;
+      margin-left: 70px;
+      margin-right: 35px;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .right-section {
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .hamburger-menu {
+      height: 24px;
+      margin-left: 24px;
+      margin-right: 20px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-img {
+      height: 32px;
+      object-fit: contain;
+    }
+    .logo-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #FF4D4D;
+    }
+    .search-button {
+      height: 40px;
+      width: 66px;
+      background-color: rgb(240, 239, 239);
+      border-style: solid;
+      border-width: 1px;
+      border-color: rgb(192, 192, 192);
+      margin-left: -1px;
+      margin-right: 10px;
+    }
+    .search-icon {
+      height: 25px;
+      margin-top: 4px;
+    }
+    .search-bar {
+      flex: 1;
+      height: 34px;
+      padding-left: 10px;
+      font-size: 16px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: rgb(179, 179, 179);
+      border-radius: 2px;
+      box-shadow: inset 1px 2px 5px rgb(0,0,0,0.05);
+      width: 0;
+    }
+    .voice-search-button {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+      border: none;
+      background-color: rgb(243, 240, 240);
+    }
+    .voice-search-icon {
+      height: 24px;
+      margin-top: 4px;
+    }
+    .search-bar::placeholder {
+      font-family: roboto,arial;
+      height: 36;
+      font-size: 16px;
+      padding-left: 10px;
+    }
+    .upload-icon {
+      height: 24px;
+    }
+    .youtube-apps-icon {
+      height: 24px;
+    }
+    .notification-icon {
+      height: 24px;
+    }
+    .notifications-icon-container {
+      position: relative;
+    }
+    .notifications-count {
+      position: absolute;
+      top: -5px;
+      right: -3px;
+      background-color: red;
+      color: white;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      padding-left: 5px;
+      padding-right: 5px;
+      padding-top:2px ;
+      padding-bottom: 2px;
+      border-radius: 10px;
+    }
+    .current-user-picture {
+      height: 32px;
+      border-radius: 16px;
+      margin-right: 20px;
+    }
+     
+
+    /* Video CSS */
+    .thumbnail {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px 8px 0 0;
+      transition: transform 0.3s ease;
+    }
+    .thumbnail:hover {
+      transform: scale(1.02);
+    }
+    .video-preview {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .video-preview:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+    .video-title {
+      margin-top: 0;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 22px;
+      margin-bottom: 8px;
+      color: #333;
+      padding: 0 12px;
+    }
+    .video-author {
+      font-size: 14px;
+      color: #606060;
+      margin-bottom: 4px;
+      padding: 0 12px;
+    }
+    .video-stats {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 12px;
+      padding: 0 12px;
+    }
+    .video-info-grid {
+      padding: 12px 0;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+    .donate-btn {
+      background-color: #FF4D4D;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 500;
+      cursor: pointer;
+      width: calc(100% - 24px);
+      margin: 8px 12px;
+      transition: background-color 0.3s;
+    }
+    .donate-btn:hover {
+      background-color: #E53E3E;
+    }
+
+    @media (max-width: 900px) {
+      .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="left-section">
+      <svg class="hamburger-menu" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <g><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></g>
+      </svg> 
+      <div class="logo-container">
+        <img src="nourishnet_logo.jpg" alt="NOURISHNET Logo" class="logo-img">
+        <div class="logo-text">NOURISHNET</div>
+      </div>
+    </div>
+    <div class="middle-section">
+      <input type="text" placeholder="Search orphanages..." class="search-bar">
+      <button class="search-button">
+        <svg class="search-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+          <g><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></g>
+        </svg>
+      </button>
+      <button class="voice-search-button">
+        <svg class="voice-search-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+          <g><path d="M12 3c-1.66 0-3 1.37-3 3.07v5.86c0 1.7 1.34 3.07 3 3.07s3-1.37 3-3.07V6.07C15 4.37 13.66 3 12 3zm6.5 9h-1c0 3.03-2.47 5.5-5.5 5.5S6.5 15.03 6.5 12h-1c0 3.24 2.39 5.93 5.5 6.41V21h2v-2.59c3.11-.48 5.5-3.17 5.5-6.41z"></path></g>
+        </svg>
+      </button>
+    </div>
+    <div class="right-section">
+      <svg class="upload-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <g><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></g>
+      </svg>
+      <svg class="youtube-apps-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <g><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"></path></g>
+      </svg>
+      <div class="notifications-icon-container">
+        <svg class="notification-icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+          <g><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15c0-2.92 1.56-5.22 4-5.98V3.96c0-1.42 1.49-2.5 2.99-1.76C13.64 2.52 14 3.23 14 3.96l0 .39c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"></path></g>
+        </svg>
+        <div class="notifications-count">3</div>
+      </div>
+      <img class="current-user-picture" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile">
+    </div>
+  </div>
+
+
+    
+  
+  <div class="video-grid">
+    <!-- Orphanage 1 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage1.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Ramanjaneya Charitable Trust</p>
+          <p class="video-author">Balaiah Nagar, Secunderabad</p>
+          <p class="video-stats">Telangana, 500010</p>
+          <a href="details/donate1.html"><button class="donate-btn" >Donate Now</button></a>
+          
+        </div> 
+      </div> 
+    </div>
+
+    <!-- Orphanage 2 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage2.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Save Next Generation</p>
+          <p class="video-author">Alwal, Secunderabad</p>
+          <p class="video-stats">Telangana, 500010</p>
+          <a href="details/donate2.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+    <!-- Orphanage 3 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage3.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Chinnare Rajaula Illu (CRI)</p>
+          <p class="video-author">Alwal, Secunderabad</p>
+          <p class="video-stats">Telangana, 500015</p>
+          <a href="details/donate3.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+    <!-- Orphanage 4 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage4.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">New Ashreya Foundation</p>
+          <p class="video-author">Alwal, Secunderabad</p>
+          <p class="video-stats">Telangana, 500015</p>
+          <a href="details/donate4.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+    <!-- Orphanage 5 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage5.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Support Girl Child Foundation</p>
+          <p class="video-author">Quthbullapur</p>
+          <p class="video-stats">Telangana, 500055</p>
+          <a href="details/donate5.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+    <!-- Orphanage 6 -->
+    <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage6.jpeg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Care and Love Orphanage</p>
+          <p class="video-author">Gagularamaram Rd, Quthbullapur</p>
+          <p class="video-stats">Hyderabad, Telangana, 500055</p>
+          <a href="details/donate6.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 7 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage7.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Naya Shree Foundation</p>
+          <p class="video-author">Gagularamaram Rd,Quthbulla</p>
+          <p class="video-stats"> Hyderabad,Telangana,500055</p>
+          <a href="details/donate7.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 8 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage8.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Sai seva Sangh</p>
+          <p class="video-author">Musapet</p>
+          <p class="video-stats">Hyderabad,Telangana,500080</p>
+          <a href="details/donate8.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+     <!-- Orphanage 9 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage9.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title"> Aadarsha Foundation</p>
+          <p class="video-author">Chaitanayapuri,Dilsukhnagar</p>
+          <p class="video-stats">Hyderabad,Telangana,500060</p>
+          <a href="details/donate9.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 10 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage10.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Thara Home</p>
+          <p class="video-author"> Bowenpally,BalaNagar</p>
+          <p class="video-stats"> Hyderabad,Telangana,500011</p>
+          <a href="details/donate10.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+     <!-- Orphanage 11 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage11.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Jeevodaya Home For Children</p>
+          <p class="video-author">Erragadda</p>
+          <p class="video-stats">Hyderabad,Telangana,500045</p>
+          <a href="details/donate11.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+     <!-- Orphanage 12 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage12.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title"> Anaadha Vidyarthi Griha </p>
+          <p class="video-author">LB Nagar</p>
+          <p class="video-stats">Hyderabad,Telangana,500074</p>
+          <a href="details/donate12.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 13 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage13.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Sphoorti Foundation</p>
+          <p class="video-author">Dundigal Rd</p>
+          <p class="video-stats">Hyderabad,Telangana,500043</p>
+          <a href="details/donate13.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 14 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage14.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Aadarana Trust </p>
+          <p class="video-author">Kismatpur</p>
+          <p class="video-stats">Hyderabad,Telangana,500030</p>
+          <a href="details/donate14.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+     <!-- Orphanage 15 -->
+     <div class="video-preview">
+      <div class="thumbnail-row">
+        <img src="orphanage15.jpg" class="thumbnail">
+      </div>
+      <div class="video-info-grid">
+        <div class="video-info">
+          <p class="video-title">Sudheer Foundation</p>
+          <p class="video-author">HayathNagar</p>
+          <p class="video-stats"> Hyderabad,Telangana,501505</p>
+          <a href="details/donate15.html"><button class="donate-btn" >Donate Now</button></a>
+        </div>
+      </div>   
+    </div>
+
+
+
+  </div>
+</body>
+</html>
